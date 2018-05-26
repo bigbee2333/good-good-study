@@ -1,0 +1,33 @@
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char str[1000],c;
+	gets(str);
+	int i, j, k, len = strlen(str);
+	for (i = 0; i < len; i++)
+	{
+		if (str[i] != ' ')  //找到单词第一个字母
+		{
+			for (j = i + 1; j < len; j++)
+			{
+				if (str[j] == ' '||j==len-1)  //找到第一个单词结束
+				{
+					if(j!=len-1)
+						j = j - 1;
+					for (k = i; k <= (i + j) / 2; k++)  //翻转
+					{
+						c = str[k];
+						str[k] = str[i + j - k];
+						str[i + j - k] = c;
+					}
+					i = j + 1;
+					break;
+				}
+			}
+		}
+	}
+	puts(str);
+	return 0;
+}
