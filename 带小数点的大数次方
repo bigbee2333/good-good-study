@@ -1,0 +1,91 @@
+#include<stdio.h>
+#include<string.h>
+#define N 260
+int ans[N+1],temp1[N+1],temp2[N+1];
+void multi(int site, int n)
+{
+	int i,j,len1,len2;
+	temp2[0]=1,site=n*site;
+	while(n--)
+	{
+		for(i=N-1; i>=0; i--)
+			if(temp1[i]!=0)
+			{
+				len1=i;
+				break;
+			}
+		for(j=N-1; j>=0; j--)
+			if(temp2[j]!=0)
+			{
+				len2=j;
+				break;
+			}
+		for(i=0; i<=len1; i++)
+		{
+			for(j=0; j<=len2; j++)
+				ans[i+j]+=temp1[i]*temp2[j];
+		}
+		for(i=0; i<N; i++)
+		{
+			if(ans[i]>=10)
+			{
+				ans[i+1]+=ans[i]/10;
+				ans[i]%=10;
+			}
+		}
+		for(i=0; i<N; i++)
+		{
+			temp2[i]=ans[i];
+			if(n!=0) ans[i]=0;
+		}
+	}
+	for(i=N-1; i>=0; i--)
+	{
+		if(ans[i]!=0)
+		{
+			len1=i;
+			break;
+		}
+	}
+	for(i=0; i<N; i++)
+	{
+		if(ans[i]!=0)
+		{
+			len2=i;
+			break;
+		}
+	}
+	if(len1==site) len1=site;
+	else if(len1<site) len1=site-1;
+
+	for(i=len1; i>=len2; i--)
+	{
+		if(i==site-1) printf(".");
+		printf("%d",ans[i]);
+	}
+	printf("\n");
+}
+int main()
+{
+	int n,len,i,j,site;
+	char s[20];
+	while(scanf("%s %d",s,&n)!=EOF)
+	{
+		memset(temp1,0,sizeof(temp1));
+		memset(temp2,0,sizeof(temp2));
+		memset(ans,0,sizeof(ans));
+		len=strlen(s);
+		if(n==0)
+		{
+			printf("1\n");
+			continue;
+		}
+		for(i=len-1,site=0,j=0; i>=0; i--)
+		{
+			if(s[i]!='.') temp1[j++]=s[i]-'0';
+			else site=j;
+		}
+		multi(site,n);
+	}
+	return 0;
+}
